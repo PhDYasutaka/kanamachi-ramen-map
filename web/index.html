@@ -81,6 +81,7 @@
   .pin text { fill: white; font-size: 13px; font-weight: 700; text-anchor: middle; dominant-baseline: central; font-family: "Zen Kaku Gothic New", sans-serif; }
   .pin:hover circle { fill: var(--red-dark); }
   .zone-label { fill: var(--muted); font-size: 15px; font-weight: 700; font-family: "Yomogi", sans-serif; }
+  .road-label { fill: var(--muted); font-size: 12px; font-family: "Zen Kaku Gothic New", sans-serif; }
   .station-box rect { fill: #fff; stroke: var(--ink); stroke-width: 2; }
   .station-box text { fill: var(--ink); font-size: 15px; font-weight: 700; text-anchor: middle; font-family: "Yomogi", sans-serif; }
 
@@ -158,41 +159,83 @@
     <h2 class="section-title"><span class="icon">🗾</span>ポンチ絵マップ</h2>
     <p class="section-desc">番号をクリックすると下の紹介にジャンプします(現行店のみ掲載)。</p>
     <div class="map-wrap">
-      <svg class="ponchi" viewBox="0 0 800 520" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="400" cy="150" rx="330" ry="120" fill="#fdebe9" />
-        <text x="400" y="45" class="zone-label" text-anchor="middle">北口エリア</text>
+      <svg class="ponchi" viewBox="0 0 800 640" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="0" width="800" height="640" fill="#f3ead6" />
 
-        <ellipse cx="400" cy="420" rx="260" ry="80" fill="#fdebe9" />
-        <text x="400" y="495" class="zone-label" text-anchor="middle">南口・京成金町エリア</text>
+        <!-- 通り(道路) -->
+        <g stroke="#d8c79a" stroke-width="14" stroke-linecap="round" fill="none">
+          <line x1="400" y1="40" x2="400" y2="600" />
+          <line x1="120" y1="230" x2="680" y2="230" />
+          <line x1="120" y1="230" x2="90" y2="480" />
+          <line x1="680" y1="230" x2="710" y2="480" />
+          <line x1="150" y1="470" x2="700" y2="470" />
+        </g>
+        <g stroke="#c9b586" stroke-width="1.5" stroke-dasharray="6 6" fill="none">
+          <line x1="400" y1="40" x2="400" y2="600" />
+          <line x1="120" y1="230" x2="680" y2="230" />
+          <line x1="150" y1="470" x2="700" y2="470" />
+        </g>
+        <text x="705" y="465" class="road-label">水戸街道</text>
 
-        <g class="station-box">
-          <rect x="330" y="255" width="140" height="60" rx="10" />
-          <text x="400" y="290">金町駅</text>
+        <!-- 線路(JR常磐線・京成金町線) -->
+        <g stroke="#9a8f80" stroke-width="5">
+          <line x1="20" y1="300" x2="780" y2="300" />
+        </g>
+        <g stroke="#9a8f80" stroke-width="3">
+          <line x1="20" y1="308" x2="780" y2="308" />
+        </g>
+        <g stroke="#9a8f80" stroke-width="2">
+          <!-- 枕木 -->
+          <line x1="40" y1="296" x2="40" y2="312" /><line x1="70" y1="296" x2="70" y2="312" />
+          <line x1="100" y1="296" x2="100" y2="312" /><line x1="130" y1="296" x2="130" y2="312" />
+          <line x1="230" y1="296" x2="230" y2="312" /><line x1="260" y1="296" x2="260" y2="312" />
+          <line x1="500" y1="296" x2="500" y2="312" /><line x1="530" y1="296" x2="530" y2="312" />
+          <line x1="560" y1="296" x2="560" y2="312" /><line x1="650" y1="296" x2="650" y2="312" />
+          <line x1="680" y1="296" x2="680" y2="312" /><line x1="710" y1="296" x2="710" y2="312" />
+          <line x1="740" y1="296" x2="740" y2="312" />
         </g>
 
+        <!-- 駅 -->
+        <g class="station-box">
+          <rect x="345" y="270" width="110" height="60" rx="8" />
+          <text x="400" y="305">金町駅</text>
+        </g>
+
+        <text x="400" y="26" class="zone-label" text-anchor="middle">北口 ▲</text>
+        <text x="400" y="620" class="zone-label" text-anchor="middle">南口・京成金町 ▼</text>
+
+        <!-- 方位 -->
+        <g transform="translate(740,50)">
+          <circle r="26" fill="#fff" stroke="#c9b586" stroke-width="1.5" />
+          <line x1="0" y1="14" x2="0" y2="-16" stroke="#3a2c1e" stroke-width="2" marker-end="url(#arrowhead)" />
+          <text x="0" y="-20" text-anchor="middle" font-size="13" font-weight="700" fill="#3a2c1e">N</text>
+        </g>
+        <defs>
+          <marker id="arrowhead" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#3a2c1e" />
+          </marker>
+        </defs>
+
         <!-- 北口エリアの店 -->
-        <g class="pin" data-num="1"><circle cx="330" cy="90" r="20"/><text x="330" y="90">1</text></g>
-        <g class="pin" data-num="4"><circle cx="420" cy="85" r="20"/><text x="420" y="85">4</text></g>
-        <g class="pin" data-num="8"><circle cx="230" cy="120" r="20"/><text x="230" y="120">8</text></g>
-        <g class="pin" data-num="9"><circle cx="520" cy="120" r="20"/><text x="520" y="120">9</text></g>
-        <g class="pin" data-num="10"><circle cx="300" cy="150" r="20"/><text x="300" y="150">10</text></g>
-        <g class="pin" data-num="11"><circle cx="480" cy="160" r="20"/><text x="480" y="160">11</text></g>
-        <g class="pin" data-num="12"><circle cx="380" cy="140" r="20"/><text x="380" y="140">12</text></g>
-        <g class="pin" data-num="13"><circle cx="220" cy="190" r="20"/><text x="220" y="190">13</text></g>
-        <g class="pin" data-num="14"><circle cx="560" cy="190" r="20"/><text x="560" y="190">14</text></g>
-        <g class="pin" data-num="15"><circle cx="430" cy="195" r="20"/><text x="430" y="195">15</text></g>
+        <g class="pin" data-num="4"><circle cx="400" cy="250" r="19"/><text x="400" y="250">4</text></g>
+        <g class="pin" data-num="10"><circle cx="345" cy="250" r="19"/><text x="345" y="250">10</text></g>
+        <g class="pin" data-num="13"><circle cx="455" cy="250" r="19"/><text x="455" y="250">13</text></g>
+        <g class="pin" data-num="14"><circle cx="310" cy="215" r="19"/><text x="310" y="215">14</text></g>
+        <g class="pin" data-num="15"><circle cx="490" cy="215" r="19"/><text x="490" y="215">15</text></g>
+        <g class="pin" data-num="1"><circle cx="400" cy="180" r="19"/><text x="400" y="180">1</text></g>
+        <g class="pin" data-num="9"><circle cx="500" cy="150" r="19"/><text x="500" y="150">9</text></g>
+        <g class="pin" data-num="8"><circle cx="295" cy="150" r="19"/><text x="295" y="150">8</text></g>
+        <g class="pin" data-num="11"><circle cx="230" cy="110" r="19"/><text x="230" y="110">11</text></g>
+        <g class="pin" data-num="12"><circle cx="565" cy="110" r="19"/><text x="565" y="110">12</text></g>
 
         <!-- 南口・京成金町エリアの店 -->
-        <g class="pin" data-num="2"><circle cx="330" cy="380" r="20"/><text x="330" y="380">2</text></g>
-        <g class="pin" data-num="3"><circle cx="420" cy="375" r="20"/><text x="420" y="375">3</text></g>
-        <g class="pin" data-num="5"><circle cx="480" cy="400" r="20"/><text x="480" y="400">5</text></g>
-        <g class="pin" data-num="6"><circle cx="260" cy="410" r="20"/><text x="260" y="410">6</text></g>
-        <g class="pin" data-num="16"><circle cx="380" cy="445" r="20"/><text x="380" y="445">16</text></g>
-        <g class="pin" data-num="17"><circle cx="470" cy="450" r="20"/><text x="470" y="450">17</text></g>
-
-        <!-- やや遠方(東金町方面)の店 -->
-        <text x="700" y="440" class="zone-label" font-size="12">(東金町方面)</text>
-        <g class="pin" data-num="7"><circle cx="690" cy="465" r="20"/><text x="690" y="465">7</text></g>
+        <g class="pin" data-num="2"><circle cx="400" cy="350" r="19"/><text x="400" y="350">2</text></g>
+        <g class="pin" data-num="5"><circle cx="345" cy="385" r="19"/><text x="345" y="385">5</text></g>
+        <g class="pin" data-num="3"><circle cx="455" cy="390" r="19"/><text x="455" y="390">3</text></g>
+        <g class="pin" data-num="17"><circle cx="490" cy="430" r="19"/><text x="490" y="430">17</text></g>
+        <g class="pin" data-num="6"><circle cx="290" cy="440" r="19"/><text x="290" y="440">6</text></g>
+        <g class="pin" data-num="16"><circle cx="360" cy="500" r="19"/><text x="360" y="500">16</text></g>
+        <g class="pin" data-num="7"><circle cx="670" cy="500" r="19"/><text x="670" y="500">7</text></g>
       </svg>
     </div>
   </section>
