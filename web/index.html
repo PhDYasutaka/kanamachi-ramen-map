@@ -194,8 +194,8 @@
   <section class="map-section">
     <h2 class="section-title"><span class="icon">🗺️</span>マップ</h2>
     <p class="section-desc">
-      OpenStreetMapの実際の地図です。番号をクリックすると下の紹介にジャンプします(現行店のみ掲載)。
-      住所が未確認の店は、徒歩時間・方角をもとにしたおおよその位置です。
+      国土地理院の住所検索で実際の番地から座標を取得した、住所が確認できている店のみ掲載しています。
+      番号をクリックすると下の紹介にジャンプします。住所未確認の店は地図には出ません(下の一覧でご確認ください)。
     </p>
     <div class="map-wrap">
       <div id="map"></div>
@@ -397,26 +397,17 @@
 </main>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-  // 実座標(OpenStreetMap Nominatimで取得した住所・町丁目の代表点)。
-  // 住所が未確認の店は、金町駅の実座標を基準に徒歩時間・方角から概算した位置。
+  // 実座標(国土地理院「地番住所検索」で住所から直接取得した正確な座標)。
+  // 住所が確認できている店だけを地図に掲載する(徒歩時間だけからの推測配置はしない)。
   const SHOPS = [
-    { num: 1, lat: 35.770763, lng: 139.869077 },
-    { num: 2, lat: 35.768622, lng: 139.871045 },
-    { num: 3, lat: 35.767424, lng: 139.870993 },
-    { num: 4, lat: 35.770900, lng: 139.869400 },
-    { num: 5, lat: 35.768392, lng: 139.872398 },
-    { num: 6, lat: 35.765864, lng: 139.864299 },
-    { num: 7, lat: 35.772059, lng: 139.878852 },
-    { num: 8, lat: 35.771600, lng: 139.869800 },
-    { num: 9, lat: 35.771650, lng: 139.869750 },
-    { num: 10, lat: 35.771024, lng: 139.870693 },
-    { num: 11, lat: 35.773184, lng: 139.869793 },
-    { num: 12, lat: 35.773184, lng: 139.872193 },
-    { num: 13, lat: 35.771024, lng: 139.870093 },
-    { num: 14, lat: 35.771024, lng: 139.871893 },
-    { num: 15, lat: 35.771024, lng: 139.869493 },
-    { num: 16, lat: 35.762384, lng: 139.870093 },
-    { num: 17, lat: 35.766704, lng: 139.871593 },
+    { num: 1, lat: 35.770794, lng: 139.872040 },
+    { num: 2, lat: 35.768497, lng: 139.871109 },
+    { num: 4, lat: 35.769981, lng: 139.871460 },
+    { num: 5, lat: 35.768021, lng: 139.871033 },
+    { num: 6, lat: 35.768162, lng: 139.865662 },
+    { num: 7, lat: 35.773224, lng: 139.877640 },
+    { num: 8, lat: 35.770947, lng: 139.868408 },
+    { num: 9, lat: 35.771107, lng: 139.868454 },
   ];
 
   const map = L.map("map").setView([35.7695843, 139.8706926], 16);
@@ -434,6 +425,7 @@
     }),
   }).addTo(map).bindPopup("金町駅");
 
+  const mappedNums = new Set(SHOPS.map((s) => s.num));
   SHOPS.forEach(({ num, lat, lng }) => {
     const card = document.getElementById("shop-" + num);
     const name = card ? card.querySelector(".name").textContent.trim() : "";
@@ -444,6 +436,17 @@
     marker.on("click", () => {
       if (card) card.scrollIntoView({ behavior: "smooth", block: "center" });
     });
+  });
+
+  // 住所未確認で地図に載っていない店には、その旨を一覧側に一言添える
+  document.querySelectorAll("section:not(.old-series) .shop-card").forEach((card) => {
+    const num = Number((card.id || "").replace("shop-", ""));
+    if (!mappedNums.has(num)) {
+      const note = document.createElement("p");
+      note.className = "confidence";
+      note.textContent = "🗺️ 住所未確認のため地図には非掲載";
+      card.appendChild(note);
+    }
   });
 
   // 現行店の各カードに「Googleマップで開く」リンクと、その場でプレビュー展開
