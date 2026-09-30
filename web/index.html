@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Yomogi&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
   :root {
     --bg: #fbf3e3;
@@ -75,15 +76,22 @@
     padding: 16px;
     box-shadow: 0 8px 24px rgba(58, 44, 30, 0.06);
   }
-  svg.ponchi { width: 100%; height: auto; display: block; }
-  .pin { cursor: pointer; }
-  .pin circle { fill: var(--red); stroke: var(--paper); stroke-width: 2.5; }
-  .pin text { fill: white; font-size: 13px; font-weight: 700; text-anchor: middle; dominant-baseline: central; font-family: "Zen Kaku Gothic New", sans-serif; }
-  .pin:hover circle { fill: var(--red-dark); }
-  .zone-label { fill: var(--muted); font-size: 15px; font-weight: 700; font-family: "Yomogi", sans-serif; }
-  .road-label { fill: var(--muted); font-size: 12px; font-family: "Zen Kaku Gothic New", sans-serif; }
-  .station-box rect { fill: #fff; stroke: var(--ink); stroke-width: 2; }
-  .station-box text { fill: var(--ink); font-size: 15px; font-weight: 700; text-anchor: middle; font-family: "Yomogi", sans-serif; }
+  #map { width: 100%; height: 480px; border-radius: 12px; z-index: 0; }
+  .pin-num {
+    background: var(--red);
+    color: white;
+    border: 2.5px solid var(--paper);
+    border-radius: 999px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: "Zen Kaku Gothic New", sans-serif;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  }
 
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
   .shop-card {
@@ -123,6 +131,34 @@
   .shop-card .confidence { font-size: 11px; color: #b8860b; margin-top: 6px; }
   .shop-card a.src { font-size: 11px; }
 
+  .map-actions { display: flex; align-items: center; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+  .map-actions a.map-link {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--red-dark);
+    text-decoration: none;
+  }
+  .map-actions a.map-link:hover { text-decoration: underline; }
+  .map-actions button.map-preview-btn {
+    font-size: 12px;
+    font-family: inherit;
+    font-weight: 700;
+    color: var(--muted);
+    background: rgba(192, 57, 43, 0.06);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 3px 12px;
+    cursor: pointer;
+  }
+  .map-actions button.map-preview-btn:hover { color: var(--red-dark); border-color: var(--red); }
+  .map-preview-frame {
+    margin-top: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .map-preview-frame iframe { display: block; width: 100%; height: 220px; border: 0; }
+
   /* 古シリーズ(閉店店) */
   section.old-series {
     background: #efe6d6;
@@ -156,87 +192,13 @@
   </div>
 
   <section class="map-section">
-    <h2 class="section-title"><span class="icon">🗾</span>ポンチ絵マップ</h2>
-    <p class="section-desc">番号をクリックすると下の紹介にジャンプします(現行店のみ掲載)。</p>
+    <h2 class="section-title"><span class="icon">🗺️</span>マップ</h2>
+    <p class="section-desc">
+      OpenStreetMapの実際の地図です。番号をクリックすると下の紹介にジャンプします(現行店のみ掲載)。
+      住所が未確認の店は、徒歩時間・方角をもとにしたおおよその位置です。
+    </p>
     <div class="map-wrap">
-      <svg class="ponchi" viewBox="0 0 800 640" xmlns="http://www.w3.org/2000/svg">
-        <rect x="0" y="0" width="800" height="640" fill="#f3ead6" />
-
-        <!-- 通り(道路) -->
-        <g stroke="#d8c79a" stroke-width="14" stroke-linecap="round" fill="none">
-          <line x1="400" y1="40" x2="400" y2="600" />
-          <line x1="120" y1="230" x2="680" y2="230" />
-          <line x1="120" y1="230" x2="90" y2="480" />
-          <line x1="680" y1="230" x2="710" y2="480" />
-          <line x1="150" y1="470" x2="700" y2="470" />
-        </g>
-        <g stroke="#c9b586" stroke-width="1.5" stroke-dasharray="6 6" fill="none">
-          <line x1="400" y1="40" x2="400" y2="600" />
-          <line x1="120" y1="230" x2="680" y2="230" />
-          <line x1="150" y1="470" x2="700" y2="470" />
-        </g>
-        <text x="705" y="465" class="road-label">水戸街道</text>
-
-        <!-- 線路(JR常磐線・京成金町線) -->
-        <g stroke="#9a8f80" stroke-width="5">
-          <line x1="20" y1="300" x2="780" y2="300" />
-        </g>
-        <g stroke="#9a8f80" stroke-width="3">
-          <line x1="20" y1="308" x2="780" y2="308" />
-        </g>
-        <g stroke="#9a8f80" stroke-width="2">
-          <!-- 枕木 -->
-          <line x1="40" y1="296" x2="40" y2="312" /><line x1="70" y1="296" x2="70" y2="312" />
-          <line x1="100" y1="296" x2="100" y2="312" /><line x1="130" y1="296" x2="130" y2="312" />
-          <line x1="230" y1="296" x2="230" y2="312" /><line x1="260" y1="296" x2="260" y2="312" />
-          <line x1="500" y1="296" x2="500" y2="312" /><line x1="530" y1="296" x2="530" y2="312" />
-          <line x1="560" y1="296" x2="560" y2="312" /><line x1="650" y1="296" x2="650" y2="312" />
-          <line x1="680" y1="296" x2="680" y2="312" /><line x1="710" y1="296" x2="710" y2="312" />
-          <line x1="740" y1="296" x2="740" y2="312" />
-        </g>
-
-        <!-- 駅 -->
-        <g class="station-box">
-          <rect x="345" y="270" width="110" height="60" rx="8" />
-          <text x="400" y="305">金町駅</text>
-        </g>
-
-        <text x="400" y="26" class="zone-label" text-anchor="middle">北口 ▲</text>
-        <text x="400" y="620" class="zone-label" text-anchor="middle">南口・京成金町 ▼</text>
-
-        <!-- 方位 -->
-        <g transform="translate(740,50)">
-          <circle r="26" fill="#fff" stroke="#c9b586" stroke-width="1.5" />
-          <line x1="0" y1="14" x2="0" y2="-16" stroke="#3a2c1e" stroke-width="2" marker-end="url(#arrowhead)" />
-          <text x="0" y="-20" text-anchor="middle" font-size="13" font-weight="700" fill="#3a2c1e">N</text>
-        </g>
-        <defs>
-          <marker id="arrowhead" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
-            <path d="M0,0 L6,3 L0,6 Z" fill="#3a2c1e" />
-          </marker>
-        </defs>
-
-        <!-- 北口エリアの店 -->
-        <g class="pin" data-num="4"><circle cx="400" cy="250" r="19"/><text x="400" y="250">4</text></g>
-        <g class="pin" data-num="10"><circle cx="345" cy="250" r="19"/><text x="345" y="250">10</text></g>
-        <g class="pin" data-num="13"><circle cx="455" cy="250" r="19"/><text x="455" y="250">13</text></g>
-        <g class="pin" data-num="14"><circle cx="310" cy="215" r="19"/><text x="310" y="215">14</text></g>
-        <g class="pin" data-num="15"><circle cx="490" cy="215" r="19"/><text x="490" y="215">15</text></g>
-        <g class="pin" data-num="1"><circle cx="400" cy="180" r="19"/><text x="400" y="180">1</text></g>
-        <g class="pin" data-num="9"><circle cx="500" cy="150" r="19"/><text x="500" y="150">9</text></g>
-        <g class="pin" data-num="8"><circle cx="295" cy="150" r="19"/><text x="295" y="150">8</text></g>
-        <g class="pin" data-num="11"><circle cx="230" cy="110" r="19"/><text x="230" y="110">11</text></g>
-        <g class="pin" data-num="12"><circle cx="565" cy="110" r="19"/><text x="565" y="110">12</text></g>
-
-        <!-- 南口・京成金町エリアの店 -->
-        <g class="pin" data-num="2"><circle cx="400" cy="350" r="19"/><text x="400" y="350">2</text></g>
-        <g class="pin" data-num="5"><circle cx="345" cy="385" r="19"/><text x="345" y="385">5</text></g>
-        <g class="pin" data-num="3"><circle cx="455" cy="390" r="19"/><text x="455" y="390">3</text></g>
-        <g class="pin" data-num="17"><circle cx="490" cy="430" r="19"/><text x="490" y="430">17</text></g>
-        <g class="pin" data-num="6"><circle cx="290" cy="440" r="19"/><text x="290" y="440">6</text></g>
-        <g class="pin" data-num="16"><circle cx="360" cy="500" r="19"/><text x="360" y="500">16</text></g>
-        <g class="pin" data-num="7"><circle cx="670" cy="500" r="19"/><text x="670" y="500">7</text></g>
-      </svg>
+      <div id="map"></div>
     </div>
   </section>
 
@@ -433,12 +395,85 @@
     </p>
   </footer>
 </main>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-  document.querySelectorAll(".pin").forEach((pin) => {
-    pin.addEventListener("click", () => {
-      const num = pin.getAttribute("data-num");
-      const target = document.getElementById("shop-" + num);
-      if (target) target.scrollIntoView({ behavior: "smooth", block: "center" });
+  // 実座標(OpenStreetMap Nominatimで取得した住所・町丁目の代表点)。
+  // 住所が未確認の店は、金町駅の実座標を基準に徒歩時間・方角から概算した位置。
+  const SHOPS = [
+    { num: 1, lat: 35.770763, lng: 139.869077 },
+    { num: 2, lat: 35.768622, lng: 139.871045 },
+    { num: 3, lat: 35.767424, lng: 139.870993 },
+    { num: 4, lat: 35.770900, lng: 139.869400 },
+    { num: 5, lat: 35.768392, lng: 139.872398 },
+    { num: 6, lat: 35.765864, lng: 139.864299 },
+    { num: 7, lat: 35.772059, lng: 139.878852 },
+    { num: 8, lat: 35.771600, lng: 139.869800 },
+    { num: 9, lat: 35.771650, lng: 139.869750 },
+    { num: 10, lat: 35.771024, lng: 139.870693 },
+    { num: 11, lat: 35.773184, lng: 139.869793 },
+    { num: 12, lat: 35.773184, lng: 139.872193 },
+    { num: 13, lat: 35.771024, lng: 139.870093 },
+    { num: 14, lat: 35.771024, lng: 139.871893 },
+    { num: 15, lat: 35.771024, lng: 139.869493 },
+    { num: 16, lat: 35.762384, lng: 139.870093 },
+    { num: 17, lat: 35.766704, lng: 139.871593 },
+  ];
+
+  const map = L.map("map").setView([35.7695843, 139.8706926], 16);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 19,
+  }).addTo(map);
+
+  L.marker([35.7695843, 139.8706926], {
+    icon: L.divIcon({
+      className: "",
+      html: '<div style="background:#3a2c1e;color:#fff;border-radius:999px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 2px 6px rgba(0,0,0,0.3);">🚉</div>',
+      iconSize: [34, 34],
+      iconAnchor: [17, 17],
+    }),
+  }).addTo(map).bindPopup("金町駅");
+
+  SHOPS.forEach(({ num, lat, lng }) => {
+    const card = document.getElementById("shop-" + num);
+    const name = card ? card.querySelector(".name").textContent.trim() : "";
+    const marker = L.marker([lat, lng], {
+      icon: L.divIcon({ className: "", html: `<div class="pin-num">${num}</div>`, iconSize: [30, 30], iconAnchor: [15, 15] }),
+    }).addTo(map);
+    marker.bindPopup(name);
+    marker.on("click", () => {
+      if (card) card.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+  });
+
+  // 現行店の各カードに「Googleマップで開く」リンクと、その場でプレビュー展開
+  // できるボタンを追加する(APIキー不要の検索埋め込み方式)。店名+「金町」で
+  // 検索するので、住所が未確認の店は別の店がヒットする可能性がある。
+  document.querySelectorAll("section:not(.old-series) .shop-card").forEach((card) => {
+    const nameEl = card.querySelector(".name");
+    if (!nameEl) return;
+    const query = encodeURIComponent(nameEl.textContent.trim() + " 東京都葛飾区金町");
+
+    const actions = document.createElement("div");
+    actions.className = "map-actions";
+    actions.innerHTML = `
+      <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=${query}" target="_blank" rel="noopener noreferrer">📍 Googleマップで開く</a>
+      <button type="button" class="map-preview-btn">▼ プレビュー</button>
+    `;
+    card.appendChild(actions);
+
+    const btn = actions.querySelector(".map-preview-btn");
+    let frame = null;
+    btn.addEventListener("click", () => {
+      if (!frame) {
+        frame = document.createElement("div");
+        frame.className = "map-preview-frame";
+        frame.innerHTML = `<iframe src="https://www.google.com/maps?q=${query}&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`;
+        card.appendChild(frame);
+      }
+      const hidden = frame.style.display === "none";
+      frame.style.display = hidden ? "" : "none";
+      btn.textContent = hidden ? "▲ プレビューを閉じる" : "▼ プレビュー";
     });
   });
 </script>
