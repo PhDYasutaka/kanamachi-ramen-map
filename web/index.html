@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>金町ラーメンマップ</title>
+<meta name="description" content="金町(葛飾区)のラーメン屋さんをまとめた非公式マップ。現行店に加え、2012年頃からの閉店した名店も「古シリーズ」として記録しています。" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Yomogi&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #fbf3e3;
+    --paper: #fffaf0;
+    --ink: #3a2c1e;
+    --muted: #8a7a6c;
+    --red: #c0392b;
+    --red-dark: #9c2c20;
+    --gold: #c99a3f;
+    --border: #e6d5b0;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    background-image: radial-gradient(circle at 10% 0%, rgba(192, 57, 43, 0.05), transparent 40%);
+    color: var(--ink);
+    font-family: "Zen Kaku Gothic New", -apple-system, "Hiragino Kaku Gothic ProN", sans-serif;
+    line-height: 1.7;
+  }
+  main { max-width: 880px; margin: 0 auto; padding: 32px 20px 64px; }
+  h1, h2, .hand {
+    font-family: "Yomogi", "Zen Kaku Gothic New", sans-serif;
+  }
+  header { text-align: center; margin-bottom: 32px; }
+  .badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border: 2px solid var(--red);
+    border-radius: 999px;
+    color: var(--red);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+  }
+  h1 { font-size: 32px; margin: 0 0 10px; color: var(--red-dark); }
+  header p.lead { color: var(--muted); font-size: 14px; max-width: 560px; margin: 0 auto; }
+  .note-box {
+    background: var(--paper);
+    border: 2px dashed var(--gold);
+    border-radius: 14px;
+    padding: 14px 18px;
+    font-size: 13px;
+    color: var(--muted);
+    margin: 24px 0 40px;
+  }
+
+  section.map-section { margin-bottom: 48px; }
+  h2.section-title {
+    font-size: 22px;
+    color: var(--red-dark);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  h2.section-title .icon { font-size: 26px; }
+  p.section-desc { color: var(--muted); font-size: 13px; margin: 0 0 20px; }
+
+  .map-wrap {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 16px;
+    box-shadow: 0 8px 24px rgba(58, 44, 30, 0.06);
+  }
+  svg.ponchi { width: 100%; height: auto; display: block; }
+  .pin { cursor: pointer; }
+  .pin circle { fill: var(--red); stroke: var(--paper); stroke-width: 2.5; }
+  .pin text { fill: white; font-size: 13px; font-weight: 700; text-anchor: middle; dominant-baseline: central; font-family: "Zen Kaku Gothic New", sans-serif; }
+  .pin:hover circle { fill: var(--red-dark); }
+  .zone-label { fill: var(--muted); font-size: 15px; font-weight: 700; font-family: "Yomogi", sans-serif; }
+  .station-box rect { fill: #fff; stroke: var(--ink); stroke-width: 2; }
+  .station-box text { fill: var(--ink); font-size: 15px; font-weight: 700; text-anchor: middle; font-family: "Yomogi", sans-serif; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+  .shop-card {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px;
+    scroll-margin-top: 20px;
+  }
+  .shop-card .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 999px;
+    background: var(--red);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    margin-right: 8px;
+    flex: none;
+  }
+  .shop-card .name-row { display: flex; align-items: center; margin-bottom: 6px; }
+  .shop-card .name { font-weight: 700; font-size: 15px; }
+  .shop-card .style-tag {
+    display: inline-block;
+    font-size: 11px;
+    color: var(--red-dark);
+    background: rgba(192, 57, 43, 0.08);
+    border-radius: 999px;
+    padding: 2px 10px;
+    margin-bottom: 8px;
+  }
+  .shop-card .desc { font-size: 13px; color: var(--ink); margin: 0 0 6px; }
+  .shop-card .meta { font-size: 11.5px; color: var(--muted); margin: 0; }
+  .shop-card .confidence { font-size: 11px; color: #b8860b; margin-top: 6px; }
+  .shop-card a.src { font-size: 11px; }
+
+  /* 古シリーズ(閉店店) */
+  section.old-series {
+    background: #efe6d6;
+    border-radius: 20px;
+    padding: 24px;
+    border: 1px solid var(--border);
+  }
+  section.old-series .shop-card { background: #f7f0e2; filter: grayscale(0.15); }
+  section.old-series .shop-card .num { background: var(--muted); }
+  section.old-series .shop-card .style-tag { color: var(--muted); background: rgba(138, 122, 112, 0.12); }
+
+  footer { text-align: center; margin-top: 56px; font-size: 12px; color: var(--muted); }
+  footer a { color: var(--red-dark); }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <span class="badge">葛飾区 金町</span>
+    <h1>🍜 金町ラーメンマップ</h1>
+    <p class="lead">
+      金町(葛飾区)のラーメン屋さんをまとめた、非公式・手描き風のラーメンマップです。
+      地図は正確な縮尺ではなく、駅からの方角・徒歩時間をもとにしたポンチ絵です。
+    </p>
+  </header>
+
+  <div class="note-box">
+    📝 このページはまだ下書き段階です。お店の紹介文はごく簡単なもので、後日オーナー自身の
+    コメント・実食レビューを追記していきます。低確度(タベログのまとめ記事1件のみが情報源)の
+    店舗には「※要確認」と付けています。
+  </div>
+
+  <section class="map-section">
+    <h2 class="section-title"><span class="icon">🗾</span>ポンチ絵マップ</h2>
+    <p class="section-desc">番号をクリックすると下の紹介にジャンプします(現行店のみ掲載)。</p>
+    <div class="map-wrap">
+      <svg class="ponchi" viewBox="0 0 800 520" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="400" cy="150" rx="330" ry="120" fill="#fdebe9" />
+        <text x="400" y="45" class="zone-label" text-anchor="middle">北口エリア</text>
+
+        <ellipse cx="400" cy="420" rx="260" ry="80" fill="#fdebe9" />
+        <text x="400" y="495" class="zone-label" text-anchor="middle">南口・京成金町エリア</text>
+
+        <g class="station-box">
+          <rect x="330" y="255" width="140" height="60" rx="10" />
+          <text x="400" y="290">金町駅</text>
+        </g>
+
+        <!-- 北口エリアの店 -->
+        <g class="pin" data-num="1"><circle cx="330" cy="90" r="20"/><text x="330" y="90">1</text></g>
+        <g class="pin" data-num="4"><circle cx="420" cy="85" r="20"/><text x="420" y="85">4</text></g>
+        <g class="pin" data-num="8"><circle cx="230" cy="120" r="20"/><text x="230" y="120">8</text></g>
+        <g class="pin" data-num="9"><circle cx="520" cy="120" r="20"/><text x="520" y="120">9</text></g>
+        <g class="pin" data-num="10"><circle cx="300" cy="150" r="20"/><text x="300" y="150">10</text></g>
+        <g class="pin" data-num="11"><circle cx="480" cy="160" r="20"/><text x="480" y="160">11</text></g>
+        <g class="pin" data-num="12"><circle cx="380" cy="140" r="20"/><text x="380" y="140">12</text></g>
+        <g class="pin" data-num="13"><circle cx="220" cy="190" r="20"/><text x="220" y="190">13</text></g>
+        <g class="pin" data-num="14"><circle cx="560" cy="190" r="20"/><text x="560" y="190">14</text></g>
+        <g class="pin" data-num="15"><circle cx="430" cy="195" r="20"/><text x="430" y="195">15</text></g>
+
+        <!-- 南口・京成金町エリアの店 -->
+        <g class="pin" data-num="2"><circle cx="330" cy="380" r="20"/><text x="330" y="380">2</text></g>
+        <g class="pin" data-num="3"><circle cx="420" cy="375" r="20"/><text x="420" y="375">3</text></g>
+        <g class="pin" data-num="5"><circle cx="480" cy="400" r="20"/><text x="480" y="400">5</text></g>
+        <g class="pin" data-num="6"><circle cx="260" cy="410" r="20"/><text x="260" y="410">6</text></g>
+        <g class="pin" data-num="16"><circle cx="380" cy="445" r="20"/><text x="380" y="445">16</text></g>
+        <g class="pin" data-num="17"><circle cx="470" cy="450" r="20"/><text x="470" y="450">17</text></g>
+
+        <!-- やや遠方(東金町方面)の店 -->
+        <text x="700" y="440" class="zone-label" font-size="12">(東金町方面)</text>
+        <g class="pin" data-num="7"><circle cx="690" cy="465" r="20"/><text x="690" y="465">7</text></g>
+      </svg>
+    </div>
+  </section>
+
+  <section class="map-section">
+    <h2 class="section-title"><span class="icon">🍥</span>現行店</h2>
+    <p class="section-desc">2026年9月時点の調査。低確度の店舗は現在も営業中か未確認です。</p>
+    <div class="grid">
+
+      <div class="shop-card" id="shop-1">
+        <div class="name-row"><span class="num">1</span><span class="name">一条流がんこラーメン金町</span></div>
+        <span class="style-tag">家系寄り 豚骨醤油</span>
+        <p class="desc">四谷の名店「一条流がんこラーメン」の暖簾分け店。2025年6月開店、旧「麺道わがまんま」跡地。</p>
+        <p class="meta">葛飾区東金町1-39-1 グリーンハイツ金町1F・北口</p>
+      </div>
+
+      <div class="shop-card" id="shop-2">
+        <div class="name-row"><span class="num">2</span><span class="name">ラーメン 三浦家</span></div>
+        <span class="style-tag">家系(横浜家系)</span>
+        <p class="desc">京成金町駅南口すぐの家系ラーメン店。「特上ラーメン」が知られる。</p>
+        <p class="meta">葛飾区金町6-5-1 ベルトーレ金町110・京成金町駅南口すぐ</p>
+      </div>
+
+      <div class="shop-card" id="shop-3">
+        <div class="name-row"><span class="num">3</span><span class="name">ramen club トトノエ</span></div>
+        <span class="style-tag">昆布水つけ麺・淡麗醤油</span>
+        <p class="desc">2023年3月開店。店主は沖縄で3年ほど店を営んだのち金町へ。</p>
+        <p class="meta">金町駅徒歩3分</p>
+      </div>
+
+      <div class="shop-card" id="shop-4">
+        <div class="name-row"><span class="num">4</span><span class="name">横浜家系ラーメン 金町商店</span></div>
+        <span class="style-tag">家系(横浜家系)</span>
+        <p class="desc">「金町商店」系列の家系ラーメン店。</p>
+        <p class="meta">葛飾区東金町1-45-5 タカモト金町ビル1F・北口徒歩2分</p>
+      </div>
+
+      <div class="shop-card" id="shop-5">
+        <div class="name-row"><span class="num">5</span><span class="name">立ち呑み居酒屋 金町製麺</span></div>
+        <span class="style-tag">手もみ太麺・濃厚鶏だし</span>
+        <p class="desc">昼はラーメン、夜は立ち呑み居酒屋になる二毛作の店。</p>
+        <p class="meta">葛飾区金町6-2-1 ヴィナシス金町1F・京成金町駅徒歩2分</p>
+      </div>
+
+      <div class="shop-card" id="shop-6">
+        <div class="name-row"><span class="num">6</span><span class="name">ラーメンせきぐち</span></div>
+        <span class="style-tag">自家製麺 中華そば・ワンタン麺</span>
+        <p class="desc">葛飾区の商店会公式サイトにも掲載されている老舗。現金のみ。</p>
+        <p class="meta">葛飾区金町4-25-3・徒歩6分</p>
+      </div>
+
+      <div class="shop-card" id="shop-7">
+        <div class="name-row"><span class="num">7</span><span class="name">せきぐちラーメン 東金町店</span></div>
+        <span class="style-tag">辛さ調整可のカレーラーメン</span>
+        <p class="desc">「ラーメンせきぐち」の姉妹店の可能性あり(未確認)。</p>
+        <p class="meta">葛飾区東金町6-13-11・徒歩12分</p>
+        <p class="confidence">※要確認: 関係性未確認</p>
+      </div>
+
+      <div class="shop-card" id="shop-8">
+        <div class="name-row"><span class="num">8</span><span class="name">しゅうまい屋</span></div>
+        <span class="style-tag">黒濃ラーメン・海老塩ラーメン</span>
+        <p class="desc">2015年4月頃、東上野から金町へ移転してきた中華料理店。</p>
+        <p class="meta">葛飾区東金町1-13-13・北口徒歩4-5分</p>
+      </div>
+
+      <div class="shop-card" id="shop-9">
+        <div class="name-row"><span class="num">9</span><span class="name">麺屋 綴</span></div>
+        <span class="style-tag">鶏白湯</span>
+        <p class="desc">泡立てた鶏白湯スープが特徴。</p>
+        <p class="meta">葛飾区東金町1-13-11・北口徒歩5分</p>
+      </div>
+
+      <div class="shop-card" id="shop-10">
+        <div class="name-row"><span class="num">10</span><span class="name">北海道ラーメン さつほろ</span></div>
+        <span class="style-tag">味噌ラーメン</span>
+        <p class="desc">辛さ強めの「地獄味噌」も。</p>
+        <p class="meta">北口徒歩2分</p>
+        <p class="confidence">※要確認: 情報源1件のみ</p>
+      </div>
+
+      <div class="shop-card" id="shop-11">
+        <div class="name-row"><span class="num">11</span><span class="name">ともゑ</span></div>
+        <span class="style-tag">塩ラーメン・醤油ラーメン</span>
+        <p class="desc"></p>
+        <p class="meta">北口徒歩5分</p>
+        <p class="confidence">※要確認: 情報源1件のみ</p>
+      </div>
+
+      <div class="shop-card" id="shop-12">
+        <div class="name-row"><span class="num">12</span><span class="name">カツシカン!</span></div>
+        <span class="style-tag">つけ麺</span>
+        <p class="desc"></p>
+        <p class="meta">北口徒歩5分</p>
+        <p class="confidence">※要確認: 情報源1件のみ</p>
+      </div>
+
+      <div class="shop-card" id="shop-13">
+        <div class="name-row"><span class="num">13</span><span class="name">豪麺 マルコ</span></div>
+        <span class="style-tag">高盛りトッピング・ミックス麺</span>
+        <p class="desc"></p>
+        <p class="meta">北口徒歩2分</p>
+        <p class="confidence">※要確認: 情報源1件のみ</p>
+      </div>
+
+      <div class="shop-card" id="shop-14">
+        <div class="name-row"><span class="num">14</span><span class="name">シセンヤ バー</span></div>
+        <span class="style-tag">醤油ラーメン・四川風辛味噌</span>
+        <p class="desc"></p>
+        <p class="meta">北口徒歩2分</p>
+        <p class="confidence">※要確認: 情報源1件のみ</p>
+      </div>
+
+      <div class="shop-card" id="shop-15">
+        <div class="name-row"><span class="num">15</span><span class="name">麺や 月星</span></div>
+        <span class="style-tag">つけ麺</span>
+        <p class="desc"></p>
+        <p class="meta">北口徒歩2分</p>
+        <p class="confidence">※要確認: 情報源1件のみ</p>
+      </div>
+
+      <div class="shop-card" id="shop-16">
+        <div class="name-row"><span class="num">16</span><span class="name">みどり軒</span></div>
+        <span class="style-tag">味噌ラーメン・もやし醤油</span>
+        <p class="desc"></p>
+        <p class="meta">南口徒歩10分</p>
+        <p class="confidence">※要確認: 情報源1件のみ</p>
+      </div>
+
+      <div class="shop-card" id="shop-17">
+        <div class="name-row"><span class="num">17</span><span class="name">東京屋台らーめん翔竜</span></div>
+        <span class="style-tag">塩チャーシューメン</span>
+        <p class="desc"></p>
+        <p class="meta">南口徒歩4分</p>
+        <p class="confidence">※要確認: 情報源1件のみ</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="map-section old-series">
+    <h2 class="section-title"><span class="icon">📼</span>古シリーズ(閉店した名店たち)</h2>
+    <p class="section-desc">2012年頃以降、金町にあったが今はもう無いラーメン・中華の店を記録しています。</p>
+    <div class="grid">
+
+      <div class="shop-card">
+        <div class="name-row"><span class="num">旧</span><span class="name">麺道わがまんま</span></div>
+        <span class="style-tag">創作醤油ラーメン(ポルチーニ香る醤油等)</span>
+        <p class="desc">2017年頃に北口へ移転、2025年5月頃閉店(告知なし)。跡地に「一条流がんこラーメン金町」が open。</p>
+        <p class="meta">葛飾区東金町1-39-1・営業期間 〜2025年5月頃</p>
+      </div>
+
+      <div class="shop-card">
+        <div class="name-row"><span class="num">旧</span><span class="name">金町角ふじ</span></div>
+        <span class="style-tag">もやし増し系</span>
+        <p class="desc">南口・水戸街道沿い。もりもりのもやしトッピングで知られた。</p>
+        <p class="meta">〜2022年12月20日閉店</p>
+      </div>
+
+      <div class="shop-card">
+        <div class="name-row"><span class="num">旧</span><span class="name">珍來 金町店</span></div>
+        <span class="style-tag">町中華</span>
+        <p class="desc">金町一番街通りで約40年営業した町中華。跡地は焼き鳥屋に。</p>
+        <p class="meta">〜2023年10月30日閉店</p>
+      </div>
+
+      <div class="shop-card">
+        <div class="name-row"><span class="num">旧</span><span class="name">國分ラーメン食堂</span></div>
+        <span class="style-tag">手もみ中華そば・鶏そば</span>
+        <p class="desc">北口の中華そば店。</p>
+        <p class="meta">葛飾区東金町1-25-5・〜2018年7月閉店</p>
+      </div>
+
+      <div class="shop-card">
+        <div class="name-row"><span class="num">旧</span><span class="name">博多まるきんラーメン 金町店</span></div>
+        <span class="style-tag">博多とんこつ</span>
+        <p class="desc">約17年営業したチェーン系とんこつ店(開業2001年頃と推定)。</p>
+        <p class="meta">葛飾区金町5-1-16・〜2018年10月27日閉店</p>
+      </div>
+
+      <div class="shop-card">
+        <div class="name-row"><span class="num">旧</span><span class="name">ポッポ 金町店</span></div>
+        <span class="style-tag">お好み焼き・たこ焼き・ラーメン</span>
+        <p class="desc">旧イトーヨーカドー金町店内のフードコーナー。44年営業(開業1977年頃と推定)。イトーヨーカドー自体も2022年9月に閉店・再開発。</p>
+        <p class="meta">〜2021年8月31日閉店</p>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <p>
+      情報源はTabelog・Retty・地域ニュースサイト(葛飾つうしん・号外NET葛飾区)等。誤り・古い情報があればご指摘ください。<br>
+      <a href="https://yasu-hub.akb-giants-1317.workers.dev/" target="_blank" rel="noopener noreferrer">← Yasu Lab トップへ</a>
+    </p>
+  </footer>
+</main>
+<script>
+  document.querySelectorAll(".pin").forEach((pin) => {
+    pin.addEventListener("click", () => {
+      const num = pin.getAttribute("data-num");
+      const target = document.getElementById("shop-" + num);
+      if (target) target.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+  });
+</script>
+</body>
+</html>

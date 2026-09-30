@@ -1,0 +1,9 @@
+{
+  "name": "kanamachi-ramen-map",
+  "version": "1.0.0",
+  "private": true,
+  "description": "金町(葛飾区)のラーメン屋さんをまとめた非公式マップ。web/ 配下は静的なHTML(ビルド不要)で、Cloudflare Workers(静的アセット配信)にそのままデプロイする。",
+  "scripts": {
+    "deploy": "wrangler deploy"
+  }
+}
