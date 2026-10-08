@@ -4,7 +4,19 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>金町ラーメンマップ</title>
-<meta name="description" content="金町(葛飾区)のラーメン屋さんをまとめた非公式マップ。店名・住所はGoogleマップと照合して確認。現行店に加え、2012年頃からの閉店した名店も「古シリーズ」として記録しています。" />
+<meta name="description" content="金町駅周辺のラーメン店15軒を、Googleマップと報道・公式情報で確認してまとめた非公式マップ。閉店・移転した店も「古シリーズ」として記録しています。" />
+<link rel="canonical" href="https://kanamachi-ramen-map.akb-giants-1317.workers.dev/" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="金町ラーメンマップ" />
+<meta property="og:description" content="金町駅周辺のラーメン店15軒を、Googleマップと報道・公式情報で確認してまとめた非公式マップ。閉店・移転した店も記録しています。" />
+<meta property="og:url" content="https://kanamachi-ramen-map.akb-giants-1317.workers.dev/" />
+<meta property="og:image" content="https://kanamachi-ramen-map.akb-giants-1317.workers.dev/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://kanamachi-ramen-map.akb-giants-1317.workers.dev/og.png" />
+<meta name="google-site-verification" content="klM8CzWub3UOzgHwNm2iB4WzNXaXQo1JKg8DSCwIhVU" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🍜%3C/text%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Yomogi&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet" />
@@ -15,7 +27,7 @@
     --bg: #fbf3e3;
     --paper: #fffaf0;
     --ink: #3a2c1e;
-    --muted: #8a7a6c;
+    --muted: #7d6e61;
     --red: #c0392b;
     --red-dark: #9c2c20;
     --gold: #c99a3f;
@@ -32,10 +44,8 @@
     line-height: 1.7;
   }
   main { max-width: 880px; margin: 0 auto; padding: 32px 20px 64px; }
-  h1, h2, .hand {
-    font-family: "Yomogi", "Zen Kaku Gothic New", sans-serif;
-  }
-  header { text-align: center; margin-bottom: 32px; }
+  h1, h2, .hand { font-family: "Yomogi", "Zen Kaku Gothic New", sans-serif; }
+  header { text-align: center; margin-bottom: 24px; }
   .badge {
     display: inline-block;
     padding: 4px 14px;
@@ -47,16 +57,17 @@
     letter-spacing: 0.1em;
     margin-bottom: 12px;
   }
-  h1 { font-size: 32px; margin: 0 0 10px; color: var(--red-dark); }
+  h1 { font-size: clamp(24px, 7vw, 32px); margin: 0 0 10px; color: var(--red-dark); }
   header p.lead { color: var(--muted); font-size: 14px; max-width: 600px; margin: 0 auto; }
+  header p.stamp { color: var(--muted); font-size: 12px; margin: 10px 0 0; }
   .note-box {
     background: var(--paper);
     border: 2px dashed var(--gold);
     border-radius: 14px;
-    padding: 14px 18px;
-    font-size: 13px;
+    padding: 12px 16px;
+    font-size: 12.5px;
     color: var(--muted);
-    margin: 24px 0 40px;
+    margin: 0 0 36px;
   }
 
   section.map-section { margin-bottom: 48px; }
@@ -69,7 +80,25 @@
     margin-bottom: 6px;
   }
   h2.section-title .icon { font-size: 26px; }
-  p.section-desc { color: var(--muted); font-size: 13px; margin: 0 0 20px; }
+  p.section-desc { color: var(--muted); font-size: 13px; margin: 0 0 16px; }
+
+  .chips { display: flex; gap: 6px; margin: 0 0 12px; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+  .chips button, .toolbar button {
+    flex: none;
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--muted);
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 4px 13px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .chips button[aria-pressed="true"], .toolbar button[aria-pressed="true"] { color: #fff; background: var(--ink); border-color: var(--ink); }
+  .toolbar { display: flex; align-items: center; gap: 6px; margin: 0 0 14px; flex-wrap: wrap; }
+  .toolbar .label { font-size: 12px; color: var(--muted); margin-right: 2px; }
 
   .map-wrap {
     background: var(--paper);
@@ -95,7 +124,7 @@
   #gmap-panel[hidden], #osm-panel[hidden] { display: none; }
   .map-hint { font-size: 12px; color: var(--muted); margin: 10px 2px 0; }
   .map-hint a { color: var(--red-dark); font-weight: 700; }
-  @media (max-width: 600px) { #map, #gmap-frame { height: 380px; } }
+  @media (max-width: 600px) { #map, #gmap-frame { height: 380px; } .map-wrap { padding: 12px; } }
 
   .pin-num {
     background: var(--red);
@@ -168,19 +197,14 @@
   .shop-card .desc { font-size: 13px; color: var(--ink); margin: 0 0 6px; }
   .shop-card .meta { font-size: 11.5px; color: var(--muted); margin: 0; }
   .shop-card .verify { font-size: 11px; color: var(--green); margin: 4px 0 0; }
-  .shop-card .confidence { font-size: 11px; color: #b8860b; margin-top: 6px; }
+  .shop-card .confidence { font-size: 11px; color: #a87400; margin-top: 6px; }
   .shop-card .alias { font-size: 11px; color: var(--muted); margin: 0 0 6px; }
   .shop-card.unconfirmed { border-style: dashed; background: #fdf7ea; }
   .shop-card.unconfirmed .num { background: var(--muted); }
+  .empty { grid-column: 1 / -1; color: var(--muted); font-size: 13px; }
 
   .map-actions { display: flex; align-items: center; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
-  .map-actions a.map-link,
-  .map-actions button.focus-btn {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--red-dark);
-    text-decoration: none;
-  }
+  .map-actions a.map-link { font-size: 12px; font-weight: 700; color: var(--red-dark); text-decoration: none; }
   .map-actions a.map-link:hover { text-decoration: underline; }
   .map-actions button {
     font-size: 12px;
@@ -194,26 +218,20 @@
     cursor: pointer;
   }
   .map-actions button:hover { color: var(--red-dark); border-color: var(--red); }
-  .map-preview-frame {
-    margin-top: 10px;
-    border-radius: 10px;
-    overflow: hidden;
-    border: 1px solid var(--border);
-  }
+  .map-preview-frame { margin-top: 10px; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
   .map-preview-frame iframe { display: block; width: 100%; height: 220px; border: 0; }
 
-  /* 古シリーズ(閉店店) */
-  section.old-series {
-    background: #efe6d6;
-    border-radius: 20px;
-    padding: 24px;
-    border: 1px solid var(--border);
-  }
+  /* 古シリーズ(閉店・移転した店) */
+  section.old-series { background: #efe6d6; border-radius: 20px; padding: 24px; border: 1px solid var(--border); }
   section.old-series .shop-card { background: #f7f0e2; filter: grayscale(0.15); }
   section.old-series .shop-card .num { background: var(--muted); }
-  section.old-series .shop-card .style-tag { color: var(--muted); background: rgba(138, 122, 112, 0.12); }
 
-  footer { text-align: center; margin-top: 56px; font-size: 12px; color: var(--muted); }
+  section.about { font-size: 12.5px; color: var(--muted); }
+  section.about h2 { font-size: 16px; margin: 0 0 8px; color: var(--red-dark); }
+  section.about ul { margin: 0; padding-left: 1.2em; }
+  section.about li { margin-bottom: 4px; }
+
+  footer { text-align: center; margin-top: 40px; font-size: 12px; color: var(--muted); }
   footer a { color: var(--red-dark); }
 </style>
 </head>
@@ -222,25 +240,16 @@
   <header>
     <span class="badge">葛飾区 金町</span>
     <h1>🍜 金町ラーメンマップ</h1>
-    <p class="lead">
-      金町(葛飾区)のラーメン屋さんをまとめた、非公式のラーメンマップです。
-      店名と住所はGoogleマップで確認し、地図上の位置は住所から求めた座標を、OpenStreetMapの店舗情報とも照らし合わせています。
-    </p>
+    <p class="lead">金町駅周辺のラーメン店を、Googleマップと報道・公式情報で確かめてまとめた、非公式のマップです。閉店・移転した店も記録しています。</p>
+    <p class="stamp">最終確認: 2026年10月8日</p>
   </header>
 
-  <div class="note-box">
-    📝 このページはまだ下書き段階です。お店の紹介文はごく簡単なもので、後日オーナー自身の
-    コメント・実食レビューを追記していきます。店名・住所は2026年10月にGoogleマップで確認しました。
-    Googleマップで金町周辺に見つからなかった店は、地図に載せず、一覧の最後の「確認できなかった店」に分けています。
-    店の入れ替わりは頻繁なので、行く前にGoogleマップで最新の情報をご確認ください。
-  </div>
+  <div class="note-box">📝 まだ下書き段階です。紹介文は公開されている情報の事実だけをまとめたもので、オーナー自身の実食コメントは後日追記します。お店の入れ替わりや休業は多いので、行く前にGoogleマップで最新の情報をご確認ください。</div>
 
   <section class="map-section">
     <h2 class="section-title"><span class="icon">🗺️</span>マップ</h2>
-    <p class="section-desc">
-      番号は下の一覧と対応しています(番号をクリックすると紹介にジャンプします)。近くの店は、拡大すると1軒ずつに分かれます。
-      「Googleマップ」のタブでは、Googleマップ上の金町駅周辺のラーメン店がそのまま見られます。
-    </p>
+    <p class="section-desc">番号は下の一覧と対応しています(番号をクリックすると紹介にジャンプします)。近くの店は、拡大すると1軒ずつに分かれます。</p>
+    <div class="chips" id="chips" role="group" aria-label="ジャンルで絞り込む"></div>
     <div class="map-wrap">
       <div class="tabs" role="tablist">
         <button type="button" role="tab" id="tab-osm" aria-selected="true">番号つきマップ</button>
@@ -253,164 +262,142 @@
 
   <section class="map-section">
     <h2 class="section-title"><span class="icon">🍥</span>現行店</h2>
-    <p class="section-desc">2026年10月時点で、Googleマップ上に店名と住所を確認できた店です。</p>
+    <p class="section-desc">店名・住所をGoogleマップで確認し、営業している手がかり(公式の告知・報道・口コミ)があった店です。</p>
+    <div class="toolbar" id="sort-toolbar">
+      <span class="label">並び順</span>
+      <button type="button" data-sort="num" aria-pressed="true">番号順</button>
+      <button type="button" data-sort="dist" aria-pressed="false">駅に近い順</button>
+    </div>
     <div class="grid" id="shop-grid"></div>
     <noscript><p class="section-desc">お店の一覧とマップの表示にはJavaScriptが必要です。</p></noscript>
   </section>
 
   <section class="map-section">
-    <h2 class="section-title"><span class="icon">🔎</span>確認できなかった店</h2>
-    <p class="section-desc">
-      参考にした記事には載っていましたが、Googleマップで金町周辺に見つからなかった店です。閉店・移転・店名変更の可能性があります。
-      場所が確かめられるまで、地図には載せていません。ご存じの方は、ぜひお知らせください。
-    </p>
+    <h2 class="section-title"><span class="icon">🔎</span>ラーメン店として掲載を見送った店</h2>
+    <p class="section-desc">参考にした記事には載っていましたが、ラーメンの提供を確認できなかった店です。</p>
     <div class="grid" id="unconfirmed-grid"></div>
   </section>
 
   <section class="map-section old-series">
-    <h2 class="section-title"><span class="icon">📼</span>古シリーズ(閉店した名店たち)</h2>
-    <p class="section-desc">2012年頃以降、金町にあったが今はもう無いラーメン・中華の店を記録しています。閉店済みのためGoogleマップでは確認できず、参考にした記事の記録です。</p>
-    <div class="grid">
+    <h2 class="section-title"><span class="icon">📼</span>古シリーズ(閉店・移転した店たち)</h2>
+    <p class="section-desc">2012年頃以降に金町にあった、今はもう無い店の記録です。Googleマップに載ったままになっている店もあります。閉店の時期は、報道などの記録によります。</p>
+    <div class="grid" id="old-grid"></div>
+  </section>
 
-      <div class="shop-card">
-        <div class="name-row"><span class="num">旧</span><span class="name">麺道わがまんま</span></div>
-        <span class="style-tag">創作醤油ラーメン(ポルチーニ香る醤油等)</span>
-        <p class="desc">2017年頃に北口へ移転、2025年5月頃閉店(告知なし)。跡地に「一条流がんこラーメン金町」が open。</p>
-        <p class="meta">葛飾区東金町1-39-1・営業期間 〜2025年5月頃</p>
-      </div>
-
-      <div class="shop-card">
-        <div class="name-row"><span class="num">旧</span><span class="name">金町角ふじ</span></div>
-        <span class="style-tag">もやし増し系</span>
-        <p class="desc">南口・水戸街道沿い。もりもりのもやしトッピングで知られた。</p>
-        <p class="meta">〜2022年12月20日閉店</p>
-      </div>
-
-      <div class="shop-card">
-        <div class="name-row"><span class="num">旧</span><span class="name">珍來 金町店</span></div>
-        <span class="style-tag">町中華</span>
-        <p class="desc">金町一番街通りで約40年営業した町中華。跡地は焼き鳥屋に。</p>
-        <p class="meta">〜2023年10月30日閉店</p>
-      </div>
-
-      <div class="shop-card">
-        <div class="name-row"><span class="num">旧</span><span class="name">國分ラーメン食堂</span></div>
-        <span class="style-tag">手もみ中華そば・鶏そば</span>
-        <p class="desc">北口の中華そば店。</p>
-        <p class="meta">葛飾区東金町1-25-5・〜2018年7月閉店</p>
-      </div>
-
-      <div class="shop-card">
-        <div class="name-row"><span class="num">旧</span><span class="name">博多まるきんラーメン 金町店</span></div>
-        <span class="style-tag">博多とんこつ</span>
-        <p class="desc">約17年営業したチェーン系とんこつ店(開業2001年頃と推定)。</p>
-        <p class="meta">葛飾区金町5-1-16・〜2018年10月27日閉店</p>
-      </div>
-
-      <div class="shop-card">
-        <div class="name-row"><span class="num">旧</span><span class="name">ポッポ 金町店</span></div>
-        <span class="style-tag">お好み焼き・たこ焼き・ラーメン</span>
-        <p class="desc">旧イトーヨーカドー金町店内のフードコーナー。44年営業(開業1977年頃と推定)。イトーヨーカドー自体も2022年9月に閉店・再開発。</p>
-        <p class="meta">〜2021年8月31日閉店</p>
-      </div>
-
-    </div>
+  <section class="about">
+    <h2>このページについて</h2>
+    <ul>
+      <li>掲載の基準: 店名と住所をGoogleマップで確認できたことに加え、公式の告知・報道・口コミなどで営業している手がかりがあった店を「現行店」にしています。最近の手がかりが少ない店には、その旨を注記しています。</li>
+      <li>地図の位置: Googleマップで確認した住所を、国土地理院の住所検索で座標にしたものです。OpenStreetMapの店舗位置と、2〜16mの範囲で一致することも確かめています。</li>
+      <li>紹介文の元情報: 各店の公式情報、葛飾つうしん・号外NET葛飾区などの地域ニュース、食べログ・Retty・地図サイトの掲載情報など。文章はそのまま写さず、事実だけを自分の言葉でまとめています。営業時間・定休日・価格は変わりやすいので載せていません。</li>
+      <li>誤り・古い情報があれば、<a href="/contact.html">お問い合わせ</a>からお知らせください。</li>
+    </ul>
   </section>
 
   <footer>
     <p>
-      店名・住所の確認: Googleマップ(2026年10月)/ 位置: 国土地理院の住所検索・© OpenStreetMap contributors / 紹介文の元情報: Tabelog・Retty・地域ニュースサイト(葛飾つうしん・号外NET葛飾区)等。<br>
-      誤り・古い情報があればご指摘ください。<br>
-      <a href="https://yasu-hub.akb-giants-1317.workers.dev/" target="_blank" rel="noopener noreferrer">← Yasu Lab トップへ</a>
+      地図: © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors・国土地理院 / Googleマップの埋め込みは、タブやプレビューを開いたときだけ読み込まれます。<br>
+      <a href="/privacy-policy.html">プライバシーポリシー</a>・<a href="/contact.html">お問い合わせ</a>・<a href="https://yasu-hub.akb-giants-1317.workers.dev/" target="_blank" rel="noopener noreferrer">Yasu Lab トップへ</a>
     </p>
+    <p>運営: Yasu Lab(個人)。実在のお店・団体とは関係のない、非公式のページです。</p>
   </footer>
 </main>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <script>
   // ---- 店のデータ ----------------------------------------------------------------
-  // 店名・住所: Googleマップ(2026年10月)で確認したもの。
-  // 座標(lat/lng): その住所を国土地理院の住所検索APIで求めた値。OpenStreetMapの店舗位置とも2〜16m以内で一致を確認済み
-  //   (月星/一滴のみ、同じ建物のためOSMの店舗位置)。
-  // alias: 参考にした記事の表記がGoogleマップと違うときの元の表記。
+  // 店名・住所: Googleマップ(2026年10月)で確認したもの。営業の手がかり(evidence)は、公式の告知・報道・口コミで確認した最新のもの。
+  // 座標(lat/lng): その住所を国土地理院の住所検索APIで求めた値(OpenStreetMapの店舗位置と2〜16m以内で一致を確認済み。
+  //   麺や月星/一滴は同じ建物のため、一滴のみOSMの店舗位置)。
+  // alias: 別名・旧称・前身の店。 tags: 絞り込み用のジャンル。 caution: 注意書き。
   const STATION = { lat: 35.7695843, lng: 139.8706926 };
   const SHOPS = [
-    { num: 1, name: "一条流がんこラーメン金町", style: "家系寄り 豚骨醤油",
-      desc: "四谷の名店「一条流がんこラーメン」の暖簾分け店。2025年6月開店、旧「麺道わがまんま」跡地。",
-      addr: "葛飾区東金町1-39-1 グリーンハイツ金町1F", lat: 35.770794, lng: 139.872040 },
-    { num: 2, name: "ラーメン 三浦家", style: "家系(横浜家系)",
-      desc: "京成金町駅南口すぐの家系ラーメン店。「特上ラーメン」が知られる。",
-      addr: "葛飾区金町6-5-1 ベルトーレ金町110", lat: 35.768497, lng: 139.871109 },
-    { num: 3, name: "ramen club トトノエ", style: "昆布水つけ麺・淡麗醤油",
-      desc: "2023年3月開店。店主は沖縄で3年ほど店を営んだのち金町へ。",
-      addr: "葛飾区東金町1-20-14", lat: 35.769943, lng: 139.868958 },
-    { num: 4, name: "横浜家系ラーメン 町田商店 金町店", style: "家系(横浜家系)",
-      desc: "家系ラーメンのチェーン「町田商店」の金町店。",
-      alias: "参考にした記事では「横浜家系ラーメン 金町商店」",
-      addr: "葛飾区東金町1-45-5 タカモト金町ビル1F", lat: 35.769981, lng: 139.871460 },
-    { num: 5, name: "立ち呑み居酒屋 金町製麺", style: "手もみ太麺・濃厚鶏だし",
-      desc: "昼はラーメン、夜は立ち呑み居酒屋になる二毛作の店。",
-      gname: "金町製麺",
-      addr: "葛飾区金町6-2-1 ヴィナシス金町1F", lat: 35.768021, lng: 139.871033 },
-    { num: 6, name: "せきぐちラーメン 末広店", style: "自家製麺 中華そば・ワンタン麺",
-      desc: "葛飾区の商店会公式サイトにも掲載されている老舗。現金のみ。",
-      alias: "参考にした記事では「ラーメンせきぐち」",
-      addr: "葛飾区金町4-25-3", lat: 35.768162, lng: 139.865662 },
-    { num: 7, name: "せきぐちラーメン 東金町店", style: "辛さ調整可のカレーラーメン",
-      desc: "「せきぐちラーメン 末広店」の姉妹店の可能性あり(未確認)。",
-      addr: "葛飾区東金町6-13-11", lat: 35.773224, lng: 139.877640, caution: "関係性未確認" },
-    { num: 8, name: "しゅうまい屋", style: "黒濃ラーメン・海老塩ラーメン",
-      desc: "2015年4月頃、東上野から金町へ移転してきた中華料理店。",
-      addr: "葛飾区東金町1-13-13", lat: 35.770947, lng: 139.868408 },
-    { num: 9, name: "麺屋 綴", style: "鶏白湯",
-      desc: "泡立てた鶏白湯スープが特徴。",
-      addr: "葛飾区東金町1-13-11", lat: 35.771107, lng: 139.868454 },
-    { num: 10, name: "中華そば ともゑ", style: "塩ラーメン・醤油ラーメン",
-      desc: "",
-      addr: "葛飾区東金町3-19-6 本山ビル1F", lat: 35.771450, lng: 139.872742 },
-    { num: 11, name: "麺やKATSU!", style: "つけ麺",
-      desc: "",
-      alias: "参考にした記事では「カツシカン!」",
-      addr: "葛飾区東金町1-16-2 五番街ビル102号室", lat: 35.771656, lng: 139.868469 },
-    { num: 12, name: "豪麺MARUKO", style: "高盛りトッピング・ミックス麺",
-      desc: "",
-      alias: "参考にした記事では「豪麺 マルコ」",
-      addr: "葛飾区東金町1-21-1", lat: 35.769932, lng: 139.869049 },
-    { num: 13, name: "SHISENYA・BAR", style: "醤油ラーメン・四川風辛味噌",
-      desc: "",
-      alias: "参考にした記事では「シセンヤ バー」",
-      addr: "葛飾区東金町1-21-15", lat: 35.769878, lng: 139.869202,
-      caution: "Googleマップ上ではバーとして載っています。ラーメンの提供は参考記事による情報です" },
-    { num: 14, name: "麺や 月星", style: "つけ麺",
-      desc: "",
-      addr: "葛飾区東金町1-11-4", lat: 35.770186, lng: 139.868223,
-      caution: "同じ住所に「つけ麺 一滴」もあり、入れ替わった可能性があります" },
-    { num: 15, name: "つけ麺 一滴", style: "つけ麺",
-      desc: "紹介文は準備中。Googleマップで見つかったため追加しました。",
-      addr: "葛飾区東金町1-11-4", lat: 35.770169, lng: 139.868188 },
-    { num: 16, name: "麺屋 神工", style: "ラーメン",
-      desc: "紹介文は準備中。Googleマップで見つかったため追加しました。",
-      addr: "葛飾区金町5-24-17", lat: 35.765881, lng: 139.868958 },
-    { num: 17, name: "下町ら〜めん", style: "ラーメン",
-      desc: "紹介文は準備中。Googleマップで見つかったため追加しました。",
+    { num: 1, name: "一条流がんこラーメン金町", tags: ["醤油・塩"], style: "ホタテ・魚介系の濃厚な塩ラーメン",
+      desc: "「一条流がんこ」の流れをくむ、四谷荒木町の店の分家。2025年6月20日に、閉店した「麺道わがまんま」の跡地に開店した。北海道産ホタテを使ったラーメンなどが看板。休業や限定提供の告知は公式Xで出ている。",
+      addr: "葛飾区東金町1-39-1 グリーンハイツ金町1F", lat: 35.770794, lng: 139.872040, evidence: "公式Xの告知(2026年2月)" },
+    { num: 2, name: "ラーメン 三浦家", tags: ["家系・豚骨"], style: "鶏豚骨(もと家系)",
+      desc: "家系出身の店主が営む鶏豚骨ラーメンの店。2021年8月開店。ラーメン・上ラーメン・特上ラーメンの3段階がある。夜は同じ店で「とんこつみうら」として営業している(2024年4月〜)。",
+      addr: "葛飾区金町6-5-1 ベルトーレ金町110", lat: 35.768497, lng: 139.871109, evidence: "グルメサイトの口コミ(2026年)" },
+    { num: 3, name: "ramen club トトノエ", tags: ["つけ麺", "醤油・塩"], style: "昆布水つけ麺・淡麗醤油らぁ麺",
+      desc: "2023年4月に開店。店主は「麺処ほん田」の出身で、沖縄で営んでいた店を閉めたのち、金町に開店した。夜は「拉麺倶楽部 にのくに」(まぜそば)として営業している(2024年4月〜)。",
+      addr: "葛飾区東金町1-20-14", lat: 35.769943, lng: 139.868958, evidence: "地図サイトの口コミ(2026年9月)" },
+    { num: 4, name: "横浜家系ラーメン 町田商店 金町店", tags: ["家系・豚骨"], style: "家系(豚骨醤油)",
+      desc: "家系ラーメンのチェーン「町田商店」の金町店。2014年12月に「金町商店」の名前で開店し、のちに町田商店の名前になった。",
+      alias: "旧称: 金町商店(2014年の開店時の名前)",
+      addr: "葛飾区東金町1-45-5 タカモト金町ビル1F", lat: 35.769981, lng: 139.871460, evidence: "公式サイトのお知らせ(2026年9月)" },
+    { num: 5, name: "立ち呑み居酒屋 金町製麺", tags: ["醤油・塩"], style: "手もみ麺の醤油ラーメン(昼)",
+      desc: "昼はラーメン、夜は立ち呑み居酒屋になる二毛作の店。2010年9月開店。「麺や七彩」とフードジャーナリストのはんつ遠藤氏の協働で生まれた店で、自家製の手もみ麺が特徴。",
+      gname: "金町製麺", caution: "昼のラーメンの提供日・時間は情報源によって食い違っています。行く前に確認してください",
+      addr: "葛飾区金町6-2-1 ヴィナシス金町1F", lat: 35.768021, lng: 139.871033, evidence: "グルメサイトの口コミ(2026年6月)" },
+    { num: 6, name: "せきぐちラーメン 末広店", tags: ["町中華"], style: "町中華(醤油・味噌・塩)",
+      desc: "駅南口にあった「せきぐちラーメン」が再開発で閉店したあと、元の店のご家族が開いた店。東金町店とは、同じ家族(親族)が営む姉妹店。2026年8月、店主の療養のため休業し、8月19日に営業を再開したと報じられた。",
+      alias: "表記ゆれ: ラーメンせきぐち、せきぐちらーめん",
+      addr: "葛飾区金町4-25-3", lat: 35.768162, lng: 139.865662, evidence: "報道(2026年8月、休業後の営業再開)" },
+    { num: 7, name: "せきぐちラーメン 東金町店", tags: ["町中華"], style: "町中華(辛さを選べるカレーラーメン)",
+      desc: "「せきぐちラーメン 末広店」と同じ家族(親族)が営む姉妹店。辛さを選べるカレーラーメンが特徴。",
+      addr: "葛飾区東金町6-13-11", lat: 35.773224, lng: 139.877640, evidence: "地図サイトの口コミ(2026年9月)" },
+    { num: 8, name: "しゅうまい屋", tags: ["町中華"], style: "町中華(黒濃ラーメン・海老塩ラーメン)",
+      desc: "ビルの建て替えで台東区東上野から移転し、2015年ごろ金町で開店した中華料理店。ご夫婦で営業している。黒濃(くろこく)ラーメン、海老塩ラーメン、焼売が知られる。",
+      addr: "葛飾区東金町1-13-13", lat: 35.770947, lng: 139.868408, evidence: "地図サイトの口コミ(2026年8月)" },
+    { num: 9, name: "麺屋 綴", tags: ["鶏白湯・煮干し"], style: "泡立てた鶏白湯・煮干し",
+      desc: "2021年1月15日開店。泡立てた鶏白湯が特徴で、とびっこ入りの「ぷちぷち白湯そば」や濃厚煮干しそばなどがある。",
+      addr: "葛飾区東金町1-13-11", lat: 35.771107, lng: 139.868454, evidence: "地図サイトの口コミ(2026年9月)" },
+    { num: 10, name: "麺やKATSU!", tags: ["つけ麺"], style: "豚骨魚介つけ麺・まぜそば",
+      desc: "2024年5月5日開店。前身は同じ場所の「麺座でん カツシカン!」(2024年3月末に閉店)で、屋号を変えて再出発した。豚骨魚介のつけ麺、ラーメン、まぜそばを出す。",
+      alias: "前身: 麺座でん カツシカン!(〜2024年3月)",
+      addr: "葛飾区東金町1-16-2 五番街ビル102号室", lat: 35.771656, lng: 139.868469, evidence: "地図サイトの口コミ(2026年9月)" },
+    { num: 11, name: "豪麺MARUKO", tags: ["二郎系"], style: "二郎インスパイア系",
+      desc: "2013年開店。自家製の太麺が特徴の二郎インスパイア系で、ラーメン・つけ麺・まぜそばを出す。",
+      alias: "表記ゆれ: 豪麺 マルコ",
+      caution: "最近の営業の手がかりが少ない店です。行く前にGoogleマップで確認してください",
+      addr: "葛飾区東金町1-21-1", lat: 35.769932, lng: 139.869049, evidence: "地図サイトの口コミ(2025年9月)が最新" },
+    { num: 12, name: "つけ麺 一滴", tags: ["つけ麺"], style: "濃厚豚骨魚介つけ麺",
+      desc: "2023年6月開店。足立区「つけ麺 和」出身の店主が、幼なじみ3人で営んでいる。同じ場所には、以前「麺や月星」(〜2021年12月)と「東京家系ラーメン Yeah K」(2022年3月〜2023年4月)があった。",
+      addr: "葛飾区東金町1-11-4", lat: 35.770169, lng: 139.868188, evidence: "地図サイトの口コミ(2026年9月)" },
+    { num: 13, name: "麺屋 神工", tags: ["二郎系"], style: "二郎系",
+      desc: "千葉・南柏で2021年1月に開業し、2023年4月15日に金町へ移転した。蒲田「鷹の目」で店長を務めた店主の店。量はミニ・小・大から選べ、トマトを使ったイタリアン風の「トマティーナ」もある。閉店した「金町角ふじ」と同じ場所。",
+      addr: "葛飾区金町5-24-17", lat: 35.765881, lng: 139.868958, evidence: "地図サイトの口コミ(2026年6月)" },
+    { num: 14, name: "下町ら〜めん", tags: ["鶏白湯・煮干し"], style: "鶏白湯(塩・醤油・味噌・辛味噌)",
+      desc: "2019年9月開店の鶏白湯ラーメン店。塩・醤油・味噌・辛味噌の白湯を出す。葛飾区商店街連合会のサイトに掲載がある。",
       gname: "下町ら~めん",
-      addr: "葛飾区東金町1-17-7", lat: 35.772171, lng: 139.869034 },
-    { num: 18, name: "丸源ラーメン 金町店", style: "ラーメン(チェーン)",
-      desc: "ラーメンチェーン「丸源ラーメン」の金町店。",
-      addr: "葛飾区東金町1-11-3", lat: 35.770100, lng: 139.868286 },
+      caution: "2024年以降の営業を確認できる情報が見つかりませんでした。行く前にGoogleマップで確認してください",
+      addr: "葛飾区東金町1-17-7", lat: 35.772171, lng: 139.869034, evidence: "地図サイトの口コミ(2023年12月)が最新" },
+    { num: 15, name: "丸源ラーメン 金町店", tags: ["醤油・塩"], style: "熟成醤油ラーメン(チェーン)",
+      desc: "全国チェーン「丸源ラーメン」の金町店。2023年12月13日開店。3種の醤油を合わせたかえしの「熟成醤油ラーメン 肉そば」が看板。",
+      addr: "葛飾区東金町1-11-3", lat: 35.770100, lng: 139.868286, evidence: "公式サイトの店舗ページ" },
   ];
 
-  // Googleマップで金町周辺に見つからなかった店(地図には載せない)
-  const UNCONFIRMED = [
-    { num: "？", name: "北海道ラーメン さつほろ", style: "味噌ラーメン",
-      desc: "辛さ強めの「地獄味噌」も。",
-      note: "参考記事では「北口徒歩2分」。Googleマップで検索すると、松戸市と綾瀬方面の同名の店は出ますが、金町駅周辺には見つかりません。" },
-    { num: "？", name: "みどり軒", style: "味噌ラーメン・もやし醤油",
-      desc: "",
-      note: "参考記事では「南口徒歩10分」。Googleマップでは金町周辺に見つかりません。" },
-    { num: "？", name: "東京屋台らーめん翔竜", style: "塩チャーシューメン",
-      desc: "",
-      note: "参考記事では「南口徒歩4分」。Googleマップでは金町周辺に見つかりません(同名で出るのは足立区の別の店です)。" },
+  // ラーメン店としては掲載を見送った店(地図には載せない)
+  const SKIPPED = [
+    { name: "SHISENYA・BAR", style: "バー",
+      desc: "参考にした記事では、醤油ラーメンや四川風の辛味噌ラーメンを出すとされていました。ただ、Googleマップ上はバーで、近年の口コミでは「麺類のメニューは無くなっている」という記載があり、ラーメンの提供は確認できませんでした。",
+      addr: "葛飾区東金町1-21-15" },
+  ];
+
+  // 古シリーズ(閉店・移転した店)。sort: 閉店の時期(YYYYMM)で並べる。不明は最後
+  const OLD = [
+    { sort: 201807, name: "國分ラーメン食堂", style: "手もみ中華そば・鶏そば",
+      desc: "北口の中華そば店。2014年12月開業。跡地は居酒屋「串焼 さと村」。", meta: "葛飾区東金町1-25-5・〜2018年7月29日閉店" },
+    { sort: 201810, name: "博多まるきんラーメン 金町店", style: "博多とんこつ",
+      desc: "約17年営業したチェーン系とんこつ店(開業2001年頃と推定)。", meta: "葛飾区金町5-1-16・〜2018年10月27日閉店" },
+    { sort: 202012, name: "中華そば ともゑ", style: "塩・醤油の中華そば",
+      desc: "鶏と魚介系の澄んだスープを出していた、6席ほどのカウンターの店。2012年5月開店。Googleマップには今も載っています。", meta: "葛飾区東金町3-19-6・〜2020年末ごろ閉店(2021年3月の報道では閉店日は不明)" },
+    { sort: 202108, name: "ポッポ 金町店", style: "お好み焼き・たこ焼き・ラーメン",
+      desc: "旧イトーヨーカドー金町店内のフードコーナー。44年営業(開業1977年頃と推定)。イトーヨーカドー自体も2022年9月に閉店・再開発。", meta: "東金町1-10-8・〜2021年8月31日閉店" },
+    { sort: 202112, name: "麺や 月星", style: "つけ麺・汁なし担々麺・中華そば",
+      desc: "2017年9月に、再開発で金町6丁目から移転オープンした店。跡地は「東京家系ラーメン Yeah K」(2022年3月〜2023年4月)を経て、「つけ麺 一滴」になった。Googleマップには今も載っています。", meta: "葛飾区東金町1-11-4・〜2021年12月末閉店" },
+    { sort: 202212, name: "金町角ふじ", style: "もやし増し系",
+      desc: "南口・水戸街道沿い。もりもりのもやしトッピングで知られた。跡地には2023年春に「麺屋 神工」が開店した。", meta: "葛飾区金町5-24-17・〜2022年12月20日閉店" },
+    { sort: 202302, name: "東京屋台らーめん翔竜(金町水戸街道店)", style: "塩チャーシューメン",
+      desc: "2015年開業。跡地には2023年3月に「オカモトモノガタリ」が開店した。", meta: "葛飾区金町5-24-16・閉店(2023年3月までに。日付は確認できず)" },
+    { sort: 202304, name: "北海道ラーメン さつほろ 金町店", style: "味噌ラーメン",
+      desc: "辛さ強めの「地獄味噌」でも知られた店。再開発に伴い金町店は営業を終え、千葉県松戸市(松戸駅東口近く)に移転した。", meta: "金町駅近く・〜2023年4月30日に営業終了(松戸へ移転)" },
+    { sort: 202310, name: "珍來 金町店", style: "町中華",
+      desc: "金町一番街通りで約40年営業した町中華。跡地は焼き鳥居酒屋に。", meta: "葛飾区東金町1-17-12・〜2023年10月30日閉店" },
+    { sort: 202505, name: "麺道わがまんま", style: "創作醤油ラーメン(ポルチーニ香る醤油等)",
+      desc: "2019年6月、千葉県鎌ケ谷市の「麺道 我飯」から移転して金町に開店。2025年5月下旬に告知なく閉店し、跡地に「一条流がんこラーメン金町」が開店した。", meta: "葛飾区東金町1-39-1・〜2025年5月下旬閉店" },
+    { sort: 999999, name: "みどり軒", style: "味噌ラーメン・もやし醤油",
+      desc: "食べログに「閉店」の表示があり、閉店の日付や移転先は確認できませんでした。", meta: "葛飾区金町5-23-10・閉店(時期不明)" },
   ];
 
   // ---- 共通処理 -------------------------------------------------------------------
@@ -425,11 +412,12 @@
   const gQuery = (s) => (s.gname || s.name) + " 東京都" + s.addr.replace(/\s.*$/, "");
   const gSearchUrl = (s) => "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(gQuery(s));
   const gEmbedUrl = (s) => "https://www.google.com/maps?q=" + encodeURIComponent(gQuery(s)) + "&output=embed&hl=ja";
+  SHOPS.forEach((s) => { s.dist = Math.round(metersBetween(STATION.lat, STATION.lng, s.lat, s.lng) / 10) * 10; });
 
   // ---- 一覧(現行店) ---------------------------------------------------------------
   const grid = document.getElementById("shop-grid");
+  const cardOf = {};
   SHOPS.forEach((s) => {
-    const dist = Math.round(metersBetween(STATION.lat, STATION.lng, s.lat, s.lng) / 10) * 10;
     const card = document.createElement("div");
     card.className = "shop-card";
     card.id = "shop-" + s.num;
@@ -437,9 +425,9 @@
       <div class="name-row"><span class="num">${s.num}</span><span class="name">${esc(s.name)}</span></div>
       <span class="style-tag">${esc(s.style)}</span>
       ${s.alias ? `<p class="alias">${esc(s.alias)}</p>` : ""}
-      ${s.desc ? `<p class="desc">${esc(s.desc)}</p>` : ""}
-      <p class="meta">${esc(s.addr)}・金町駅から直線で約${dist}m</p>
-      <p class="verify">✓ 店名・住所をGoogleマップで確認(2026年10月)</p>
+      <p class="desc">${esc(s.desc)}</p>
+      <p class="meta">${esc(s.addr)}・金町駅から直線で約${s.dist}m</p>
+      <p class="verify">✓ 店名・住所をGoogleマップで確認(2026年10月)<br>営業の手がかり: ${esc(s.evidence)}</p>
       ${s.caution ? `<p class="confidence">※要確認: ${esc(s.caution)}</p>` : ""}
       <div class="map-actions">
         <button type="button" class="focus-btn">🗺️ 地図で見る</button>
@@ -447,6 +435,7 @@
         <button type="button" class="map-preview-btn">▼ プレビュー</button>
       </div>`;
     grid.appendChild(card);
+    cardOf[s.num] = card;
 
     const btn = card.querySelector(".map-preview-btn");
     let frame = null;
@@ -463,22 +452,35 @@
       btn.textContent = open ? "▲ プレビューを閉じる" : "▼ プレビュー";
     });
   });
+  const emptyMsg = document.createElement("p");
+  emptyMsg.className = "empty";
+  emptyMsg.textContent = "このジャンルの店は、いまのところ掲載がありません。";
+  emptyMsg.hidden = true;
+  grid.appendChild(emptyMsg);
 
-  // ---- 確認できなかった店 ----------------------------------------------------------
+  // ---- 掲載を見送った店 / 古シリーズ -------------------------------------------------
   const ugrid = document.getElementById("unconfirmed-grid");
-  UNCONFIRMED.forEach((s) => {
+  SKIPPED.forEach((s) => {
     const card = document.createElement("div");
     card.className = "shop-card unconfirmed";
-    const q = encodeURIComponent(s.name + " 葛飾区金町");
     card.innerHTML = `
       <div class="name-row"><span class="num">？</span><span class="name">${esc(s.name)}</span></div>
       <span class="style-tag">${esc(s.style)}</span>
-      ${s.desc ? `<p class="desc">${esc(s.desc)}</p>` : ""}
-      <p class="confidence">🔎 ${esc(s.note)}</p>
-      <div class="map-actions">
-        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank" rel="noopener noreferrer">📍 Googleマップで探す</a>
-      </div>`;
+      <p class="desc">${esc(s.desc)}</p>
+      <p class="meta">${esc(s.addr)}</p>
+      <div class="map-actions"><a class="map-link" href="${gSearchUrl(s)}" target="_blank" rel="noopener noreferrer">📍 Googleマップで開く</a></div>`;
     ugrid.appendChild(card);
+  });
+  const ogrid = document.getElementById("old-grid");
+  OLD.slice().sort((a, b) => a.sort - b.sort).forEach((s) => {
+    const card = document.createElement("div");
+    card.className = "shop-card";
+    card.innerHTML = `
+      <div class="name-row"><span class="num">旧</span><span class="name">${esc(s.name)}</span></div>
+      <span class="style-tag">${esc(s.style)}</span>
+      <p class="desc">${esc(s.desc)}</p>
+      <p class="meta">${esc(s.meta)}</p>`;
+    ogrid.appendChild(card);
   });
 
   // ---- 番号つきマップ(Leaflet + OpenStreetMap) ------------------------------------
@@ -514,18 +516,48 @@
     });
     m.bindPopup(`<strong>${esc(s.num)}. ${esc(s.name)}</strong><br>${esc(s.addr)}<br><a href="${gSearchUrl(s)}" target="_blank" rel="noopener noreferrer">📍 Googleマップで開く</a>`);
     m.on("click", () => {
-      const c = document.getElementById("shop-" + s.num);
-      if (c) c.scrollIntoView({ behavior: "smooth", block: "center" });
+      const c = cardOf[s.num];
+      if (c && !c.hidden) c.scrollIntoView({ behavior: "smooth", block: "center" });
     });
     markers[s.num] = m;
-    cluster.addLayer(m);
   });
   map.addLayer(cluster);
 
-  // 一覧の「地図で見る」: 地図までスクロールし、その店まで拡大してポップアップを開く
+  // ---- ジャンルの絞り込み・並べ替え ---------------------------------------------------
+  const GENRES = ["家系・豚骨", "つけ麺", "鶏白湯・煮干し", "醤油・塩", "二郎系", "町中華"];
+  let genre = "all";
+  const chipsEl = document.getElementById("chips");
+  function applyFilter() {
+    const shown = SHOPS.filter((s) => genre === "all" || s.tags.includes(genre));
+    cluster.clearLayers();
+    cluster.addLayers(shown.map((s) => markers[s.num]));
+    SHOPS.forEach((s) => { cardOf[s.num].hidden = !(genre === "all" || s.tags.includes(genre)); });
+    emptyMsg.hidden = shown.length > 0;
+    chipsEl.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.genre === genre)));
+  }
+  [["all", `すべて(${SHOPS.length})`], ...GENRES.map((g) => [g, `${g}(${SHOPS.filter((s) => s.tags.includes(g)).length})`])].forEach(([g, label]) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.dataset.genre = g;
+    b.textContent = label;
+    b.addEventListener("click", () => { genre = g; applyFilter(); });
+    chipsEl.appendChild(b);
+  });
+  applyFilter();
+
+  document.querySelectorAll("#sort-toolbar button").forEach((b) => {
+    b.addEventListener("click", () => {
+      const byDist = b.dataset.sort === "dist";
+      document.querySelectorAll("#sort-toolbar button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+      SHOPS.slice().sort((a, c) => (byDist ? a.dist - c.dist || a.num - c.num : a.num - c.num)).forEach((s) => grid.insertBefore(cardOf[s.num], emptyMsg));
+    });
+  });
+
+  // 一覧の「地図で見る」: 地図までスクロールし、その店まで拡大してポップアップを開く(絞り込み中なら解除する)
   document.querySelectorAll(".focus-btn").forEach((b) => {
     b.addEventListener("click", () => {
       const num = Number(b.closest(".shop-card").id.replace("shop-", ""));
+      if (genre !== "all") { genre = "all"; applyFilter(); }
       selectTab("osm");
       document.getElementById("osm-panel").scrollIntoView({ behavior: "smooth", block: "center" });
       map.invalidateSize();
@@ -547,13 +579,35 @@
       const q = encodeURIComponent("ラーメン 金町駅");
       gPanel.innerHTML = `
         <iframe id="gmap-frame" src="https://www.google.com/maps?q=${q}&output=embed&hl=ja" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="金町駅周辺のラーメン店(Googleマップ)"></iframe>
-        <p class="map-hint">Googleマップで「ラーメン 金町駅」を検索した結果です。店の入れ替わりは、こちらのほうが早く反映されます。
+        <p class="map-hint">Googleマップで「ラーメン 金町駅」を検索した結果です。<strong>閉店した店が載ったままのことがあります</strong>(例: 麺や月星、中華そば ともゑ)。営業の有無は、このページの「現行店」「古シリーズ」もあわせてご覧ください。
         <a href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank" rel="noopener noreferrer">Googleマップで大きく開く ↗</a></p>`;
     }
     if (!isG) map.invalidateSize();
   }
   document.getElementById("tab-osm").addEventListener("click", () => selectTab("osm"));
   document.getElementById("tab-g").addEventListener("click", () => selectTab("g"));
+
+  // ---- 検索エンジン向けの構造化データ(店の一覧) ----------------------------------------
+  const ld = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "金町駅周辺のラーメン店",
+    itemListElement: SHOPS.map((s, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      item: {
+        "@type": "Restaurant",
+        name: s.name,
+        servesCuisine: "ラーメン",
+        address: { "@type": "PostalAddress", addressCountry: "JP", addressRegion: "東京都", addressLocality: "葛飾区", streetAddress: s.addr.replace(/^葛飾区/, "").replace(/\s.*$/, "") },
+        geo: { "@type": "GeoCoordinates", latitude: s.lat, longitude: s.lng },
+      },
+    })),
+  };
+  const ldEl = document.createElement("script");
+  ldEl.type = "application/ld+json";
+  ldEl.textContent = JSON.stringify(ld);
+  document.head.appendChild(ldEl);
 </script>
 </body>
 </html>
